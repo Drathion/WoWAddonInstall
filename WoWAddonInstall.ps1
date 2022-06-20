@@ -11,8 +11,13 @@ foreach($sourceFile in (Get-ChildItem -Path $downloadPath -filter '*.zip'))
     if ($sourceFile -match "\[" -or $sourceFile -match "\]")
     {
        # Remove any detected brackets from the filename
-       $sourceFile = $sourceFile -replace "\["
-       $sourceFile = $sourceFile -replace "\]"
+       $newFilename = $sourceFile
+       $newFilename = $newFilename -replace "\["
+       $newFilename = $newFilename -replace "\]"
+
+       # Rename the file to the new one without brackets
+       Rename-Item -LiteralPath "$downloadPath\$sourceFile" -NewName $newFilename
+       $sourceFile = $newFilename
     }
 
     # Unzip the compressed folder and extract it to the WoW Addons directory stored in $wowPath
